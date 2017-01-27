@@ -16,28 +16,22 @@ function btnClick(value) {
 function parseURL()
 {
 	var utm = [
-		"source",
-		"medium",
-		"campaign",
-		"term",
-		"content"
+		"utm_source",
+		"utm_medium",
+		"utm_campaign",
+		"utm_term",
+		"utm_content",
+		"dgit",
+		"crid"
 	];
 	var query_string = {};
 	var location = window.location;
-  	var query = location.search.substring(1);
-  	var vars = query.split("&");
+  	var query = location.search.substring(1).query.split("&");
   	for (var i=0;i<vars.length;i++) {
 	    var pair = vars[i].split("=");
-        // If first entry with this name
-    	if (typeof query_string[pair[0]] === "undefined") {
-	      	query_string[pair[0]] = decodeURIComponent(pair[1]);
-	        // If second entry with this name
-	    } else if (typeof query_string[pair[0]] === "string") {
-      		var arr = [ query_string[pair[0]],decodeURIComponent(pair[1]) ];
-	      	query_string[pair[0]] = arr;
-	        // If third or later entry with this name
-	    } else {
-	      	query_string[pair[0]].push(decodeURIComponent(pair[1]));
+		var param = query_string[pair[0]];
+    	if (typeof param === "string") {
+      		data[param] = decodeURIComponent(pair[1]);
 	    }
   	}
 }
