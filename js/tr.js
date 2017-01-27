@@ -15,71 +15,64 @@ function btnClick(value) {
  */
 function parseURL()
 {
-	var utm = [
-		"utm_source",
-		"utm_medium",
-		"utm_campaign",
-		"utm_term",
-		"utm_content",
-		"dgit",
-		"crid"
-	];
-	var query_string = {};
-	var location = window.location;
-  	var query = location.search.substring(1).query.split("&");
-  	for (var i=0;i<vars.length;i++) {
-	    var pair = vars[i].split("=");
-		var param = query_string[pair[0]];
-    	if (typeof param === "string") {
-      		data[param] = decodeURIComponent(pair[1]);
-	    }
-  	}
+    var utm = [
+        "utm_source",
+        "utm_medium",
+        "utm_campaign",
+        "utm_term",
+        "utm_content",
+        "dgit",
+        "crid"
+    ];
+    var query_string = {};
+    var location = window.location;
+    var vars = location.search.substring(1).split("&");
+    for (var i=0;i<vars.length;i++) {
+        var pair = vars[i].split("=");
+        var param = query_string[pair[0]];
+        if (typeof param === "string") {
+            data[param] = decodeURIComponent(pair[1]);
+        }
+    }
 }
 
 function getData() {
-	var parser = new UAParser();
+    var parser = new UAParser();
 
-	var ua = navigator.userAgent;
-	this.data.ua = (ua != null) ? ua : undefined;
+    var ua = navigator.userAgent;
+    this.data.ua = (ua != null) ? ua : undefined;
 
-	var ref = document.referrer;
-	data.ref = (ref != null) ? ref : undefined;
+    var ref = document.referrer;
+    data.ref = (ref != null) ? ref : undefined;
 
-	var browser = parser.getBrowser().name;
-	data.browser = (browser != null) ? browser : undefined;
+    var browser = parser.getBrowser().name;
+    data.browser = (browser != null) ? browser : undefined;
 
-	var device = parser.getDevice().name;
-	data.device = (device != null) ? device : undefined;
+    var device = parser.getDevice().name;
+    data.device = (device != null) ? device : undefined;
 
-	var os = parser.getOS().name;
-	data.os = (os != null) ? os : undefined;
+    var os = parser.getOS().name;
+    data.os = (os != null) ? os : undefined;
 
-	var lang = navigator.language;
-	data.lang = (lang != null) ? lang : undefined;
+    var lang = navigator.language;
+    data.lang = (lang != null) ? lang : undefined;
 }
 ////////////////
 //    GEOPOSITIONING
 ///////////////
-function showPosition(position) {
-	var lat = document.querySelector('#tr_latitude');
-	var long = document.querySelector('#tr_longitude');
-    lat.innerHTML = position.coords.latitude;
-	long.innerHTML = position.coords.longitude;
+function storePosition(position) {
+    data.lat = position.coords.latitude;
+    data.long = position.coords.longitude;
 }
 
 function getLocation() {
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition);
-    } else {
-		var x = document.querySelector('#status');
-        x.innerHTML = "Geolocation is not supported by this browser.";
+        navigator.geolocation.getCurrentPosition(storePosition);
     }
 }
 var self = this;
 document.addEventListener("DOMContentLoaded", function(event) {
-
-	parseURL();
-	getData();
-	getLocation();
-
+    parseURL();
+    getData();
+    getLocation();
 }.bind(this));
